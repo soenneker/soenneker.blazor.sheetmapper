@@ -136,9 +136,3 @@ Use the `ShowStatusIcons` parameter to toggle the entire status‑icon column:
   * `.status-icon` — container for the icon
 
 Override or extend them to match your design system.
-
----
-
-## License
-
-This project is licensed under the [MIT License](LICENSE).
