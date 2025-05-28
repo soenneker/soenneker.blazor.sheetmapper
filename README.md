@@ -139,22 +139,6 @@ Override or extend them to match your design system.
 
 ---
 
-## Demo & Samples
-
-
----
-
-## Contributing
-
-1. Fork the repo
-2. Create a branch (`git checkout -b feature/foo`)
-3. Commit your changes & push
-4. Open a PR
-
-Please follow the existing code style and add tests where applicable.
-
----
-
 ## License
 
 This project is licensed under the [MIT License](LICENSE).
