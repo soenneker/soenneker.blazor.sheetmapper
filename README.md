@@ -6,6 +6,8 @@
 
 A Blazor component and utility library for mapping CSV or tabular files to C# objects.
 
+![image](https://github.com/user-attachments/assets/7aa39358-be2d-47af-8f04-68ac37281112)
+
 Leverage [FilePond](https://github.com/soenneker/soenneker.blazor.filepond) for uploads and [TomSelect](https://github.com/soenneker/soenneker.blazor.tomselect) for interactive dropdowns. Automatically extract headers, map columns to your model, and retrieve a clean `{ property → column }` map.
 
 [Demo](https://soenneker.github.io/soenneker.blazor.sheetmapper)
