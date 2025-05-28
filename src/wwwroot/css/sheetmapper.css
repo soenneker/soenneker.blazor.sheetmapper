@@ -1,0 +1,42 @@
+﻿/* each row: label + dropdown + icon, all same height */
+.map-row {
+    margin-bottom: 0.75rem;
+}
+
+    /* property label */
+    .map-row .input-group-text {
+        width: 8rem;
+        font-weight: 600;
+        background-color: #f8f9fa;
+        border-right: 0;
+        justify-content: flex-start;
+    }
+
+    /* remove inner borders so it looks like one control */
+    .map-row .form-control {
+        border-left: 0;
+        border-right: 0;
+    }
+
+    /* status pill */
+    .map-row .status-icon {
+        width: 2.5rem;
+        background-color: #f8f9fa;
+        border-left: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+    }
+
+.status-icon--warning {
+    color: #e0a800;
+}
+
+.status-icon--duplicate {
+    color: #17a2b8;
+}
+
+.status-icon--ok {
+    color: #28a745;
+}

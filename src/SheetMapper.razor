@@ -1,0 +1,126 @@
+﻿@using System.IO
+@using System.Reflection
+@using nietras.SeparatedValues
+@using Soenneker.Blazor.TomSelect
+@using Soenneker.Blazor.TomSelect.Configuration
+@using Soenneker.Blazor.FilePond
+@using Soenneker.Blazor.FilePond.Dtos
+@using Soenneker.Blazor.FilePond.Options
+@using Soenneker.Blazor.SheetMapper.Abstract
+@using Soenneker.Extensions.Task
+@using Soenneker.Extensions.ValueTask
+
+@inject ISheetMapperInterop SheetMapperInterop
+
+@implements ISheetMapper
+
+<div id="@ElementId" >
+    <section class="mb-4" >
+        <label class="form-label fw-semibold" >1. Upload your CSV file</label>
+        <FilePond @ref="FilePond" Options="_options" OnAddFile="OnAddFile" />
+    </section>
+
+    @if (_headers.Count > 0 && TargetType is not null)
+    {
+        <section>
+            <h5 class="fw-semibold mb-3" >2. Map CSV columns to your model</h5>
+            @foreach (string prop in _targetProperties)
+            {
+                bool mapped = _targetToHeaderMap[prop].FirstOrDefault()?.Length > 0;
+                bool duplicate = mapped && _targetToHeaderMap.Values.Count(v => v.SequenceEqual(_targetToHeaderMap[prop])) > 1;
+
+                <div class="input-group map-row" >
+                    <span class="input-group-text" >@prop</span>
+
+                    <TomSelect class="form-control"
+                               TItem="string"
+                               TType="string"
+                               Data="@_headers"
+                               TextField="item => item"
+                               ValueField="item => item"
+                               Placeholder="Select column…"
+                               Configuration="@_config"
+                               Multiple="false"
+                               @bind-Items="_targetToHeaderMap[prop]" />
+
+                    @if (ShowStatusIcons)
+                    {
+                        <span class="input-group-text status-icon" >
+                            @(!mapped ? NotMappedIcon : duplicate ? DuplicatedIcon : MappedIcon)
+                        </span>
+                    }
+                </div>
+            }
+        </section>
+    }
+</div>
+
+@code {
+    public readonly string ElementId = $"sheetmapper-{Guid.NewGuid()}";
+
+    private FilePond? FilePond { get; set; }
+    private readonly FilePondOptions _options = new() {MaxFiles = 1, AllowMultiple = false};
+    private readonly TomSelectConfiguration _config = new();
+
+    [Parameter, EditorRequired]
+    public Type? TargetType { get; set; }
+
+    [Parameter]
+    public bool ShowStatusIcons { get; set; } = true;
+
+    [Parameter]
+    public bool AutomaticallyMap { get; set; }
+
+    [Parameter]
+    public RenderFragment NotMappedIcon { get; set; } = @<span>⚠️</span>;
+
+    [Parameter]
+    public RenderFragment DuplicatedIcon { get; set; } = @<span>🔁</span>;
+
+    [Parameter]
+    public RenderFragment MappedIcon { get; set; } = @<span>✅</span>;
+
+    private List<string> _headers = [];
+    private List<string> _targetProperties = [];
+    private Dictionary<string, List<string>> _targetToHeaderMap = new();
+
+    public ValueTask InitializeInterop() => SheetMapperInterop.Initialize();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await SheetMapperInterop.Initialize().NoSync();
+    }
+
+    private async Task OnAddFile((FilePondError? error, FilePondFileItem fileItem) obj)
+    {
+        Stream? stream = await FilePond!.GetStreamForFile().NoSync();
+        SepReader sepReader = await Sep.Reader().FromAsync(stream);
+
+        _headers = sepReader.Header.ColNames.ToList();
+        _targetProperties = TargetType!.GetProperties(BindingFlags.Public | BindingFlags.Instance).Where(p => p.CanWrite).Select(p => p.Name).ToList();
+
+        // init empty selection for each property
+        _targetToHeaderMap = _targetProperties.ToDictionary(p => p, _ => new List<string>());
+
+        if (AutomaticallyMap)
+        {
+            AutoMap();
+            StateHasChanged();
+        }
+
+        await stream.DisposeAsync().NoSync();
+    }
+
+    public void AutoMap()
+    {
+        foreach (string prop in _targetProperties)
+        {
+            string? match = _headers.FirstOrDefault(h => string.Equals(h, prop, StringComparison.OrdinalIgnoreCase) || string.Equals(h.Replace(" ", ""), prop, StringComparison.OrdinalIgnoreCase));
+
+            _targetToHeaderMap[prop] = match is null ? [] : [match];
+        }
+    }
+
+    public Dictionary<string, string> GetCurrentMap() => _targetToHeaderMap.ToDictionary(kvp => kvp.Key, kvp => kvp.Value.FirstOrDefault() ?? string.Empty);
+}
+

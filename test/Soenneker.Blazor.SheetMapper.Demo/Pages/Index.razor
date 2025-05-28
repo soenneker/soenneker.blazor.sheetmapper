@@ -1,0 +1,77 @@
+﻿@page "/"
+@using Microsoft.Extensions.Logging
+@using Soenneker.Blazor.SheetMapper.Demo.Dtos
+
+@inject ILogger<Index> Logger
+
+<style>
+  .hero {
+    background: linear-gradient(135deg,#667eea,#764ba2);
+    color: #fff;
+    padding: 4rem 1rem;
+    text-align: center;
+    border-radius: .5rem;
+    margin-bottom: 2rem;
+  }
+  .hero img {
+    max-height: 100px;
+    margin-bottom: 1rem;
+  }
+  .mapper-card {
+    border-radius: .5rem;
+    box-shadow: 0 0.5rem 1.5rem rgba(0,0,0,.1);
+    margin-bottom: 2rem;
+  }
+  .btn-automap {
+    background-color: #ff6b6b;
+    border-color: #ff6b6b;
+  }
+  .btn-automap:hover {
+    background-color: #ee5253;
+    border-color: #ee5253;
+  }
+</style>
+
+<div class="container py-5" >
+    <div class="hero" >
+        <img src="https://user-images.githubusercontent.com/4441470/224455560-91ed3ee7-f510-4041-a8d2-3fc093025112.png" alt="SheetMapper logo" />
+        <h1 class="display-4" >SheetMapper Demo</h1>
+        <p class="lead text-light" >See how effortlessly you can map CSV data to your C# models.</p>
+    </div>
+
+    <div class="card mapper-card" >
+        <div class="card-body" >
+            <SheetMapper
+                TargetType="typeof(Employee)"
+                @ref="_sheetMapper"
+                AutomaticallyMap="true" >
+
+                <NotMappedIcon>
+                    <i class="fas fa-exclamation-triangle" ></i>
+                </NotMappedIcon>
+
+                <DuplicatedIcon>
+                    <span style="font-size:1.2em; color:#e53e3e;" >⚠️</span>
+                </DuplicatedIcon>
+
+                <MappedIcon>
+                    <span class="text-success" >
+                        <i class="fas fa-check-circle" ></i>
+                    </span>
+                </MappedIcon>
+            </SheetMapper>
+        </div>
+    </div>
+
+    <div class="text-center" >
+        <button class="btn btn-automap btn-lg" @onclick="AutoMap" >
+            AutoMap
+        </button>
+    </div>
+</div>
+
+@code {
+    private SheetMapper _sheetMapper;
+
+    private void AutoMap() => _sheetMapper.AutoMap();
+}
