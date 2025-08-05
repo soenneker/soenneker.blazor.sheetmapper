@@ -44,7 +44,7 @@
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="9.0.8" />
         <PackageReference Include="Sep" Version="0.11.0" />
-        <PackageReference Include="Soenneker.Blazor.FilePond" Version="3.0.3233" />
+        <PackageReference Include="Soenneker.Blazor.FilePond" Version="3.0.3237" />
         <PackageReference Include="Soenneker.Blazor.TomSelect" Version="3.0.3907" />
     </ItemGroup>
 </Project>
