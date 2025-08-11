@@ -1,17 +1,17 @@
 ﻿@using System.IO
 @using System.Reflection
 @using nietras.SeparatedValues
-@using Soenneker.Blazor.TomSelect
 @using Soenneker.Blazor.TomSelect.Configuration
 @using Soenneker.Blazor.FilePond
 @using Soenneker.Blazor.FilePond.Dtos
 @using Soenneker.Blazor.FilePond.Options
 @using Soenneker.Blazor.SheetMapper.Abstract
-@using Soenneker.Extensions.Task
 @using Soenneker.Extensions.ValueTask
+@using Soenneker.Quark.Components.Cancellable
 
 @inject ISheetMapperInterop SheetMapperInterop
 
+@inherits CancellableComponent
 @implements ISheetMapper
 
 <div id="@ElementId" >
@@ -84,11 +84,11 @@
     private List<string> _targetProperties = [];
     private Dictionary<string, List<string>> _targetToHeaderMap = new();
 
-    public ValueTask InitializeInterop() => SheetMapperInterop.Initialize();
+    public ValueTask InitializeInterop() => SheetMapperInterop.Initialize(CancellationToken);
 
     protected override async Task OnInitializedAsync()
     {
-        await SheetMapperInterop.Initialize().NoSync();
+        await SheetMapperInterop.Initialize(CancellationToken).NoSync();
     }
 
     private async Task OnAddFile((FilePondError? error, FilePondFileItem fileItem) obj)
@@ -123,4 +123,3 @@
 
     public Dictionary<string, string> GetCurrentMap() => _targetToHeaderMap.ToDictionary(kvp => kvp.Key, kvp => kvp.Value.FirstOrDefault() ?? string.Empty);
 }
-

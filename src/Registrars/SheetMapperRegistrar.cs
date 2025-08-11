@@ -16,9 +16,7 @@ public static class SheetMapperRegistrar
     /// </summary>
     public static IServiceCollection AddSheetMapperAsScoped(this IServiceCollection services)
     {
-        services.AddTomSelectInteropAsScoped().AddFilePondInteropAsScoped();
-
-        services.TryAddScoped<ISheetMapperInterop, SheetMapperInterop>();
+        services.AddTomSelectInteropAsScoped().AddFilePondInteropAsScoped().TryAddScoped<ISheetMapperInterop, SheetMapperInterop>();
         services.TryAddScoped<ISheetMapper, SheetMapper>();
 
         return services;
