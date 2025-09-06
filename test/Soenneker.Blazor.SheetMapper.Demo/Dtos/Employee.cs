@@ -1,4 +1,4 @@
-﻿namespace Soenneker.Blazor.SheetMapper.Demo.Dtos;
+namespace Soenneker.Blazor.SheetMapper.Demo.Dtos;
 
 public class Employee
 {

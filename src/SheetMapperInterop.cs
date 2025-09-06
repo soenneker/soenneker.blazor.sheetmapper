@@ -16,7 +16,7 @@ public sealed class SheetMapperInterop : ISheetMapperInterop
     {
         _scriptInitializer = new AsyncSingleton(async (token, _) =>
         {
-            await resourceLoader.LoadStyle("_content/Soenneker.Blazor.SheetMapper/css/sheetmapper.css", cancellationToken: token).NoSync();
+            await resourceLoader.LoadStyle("_content/Soenneker.Blazor.SheetMapper/css/sheetmapper.css", cancellationToken: token);
 
             return new object();
         });

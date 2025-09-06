@@ -1,4 +1,4 @@
-﻿using Soenneker.Blazor.SheetMapper.Abstract;
+using Soenneker.Blazor.SheetMapper.Abstract;
 using Soenneker.Tests.FixturedUnit;
 using Xunit;
 

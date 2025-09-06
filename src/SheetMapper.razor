@@ -1,4 +1,4 @@
-﻿@using System.IO
+@using System.IO
 @using System.Reflection
 @using nietras.SeparatedValues
 @using Soenneker.Blazor.TomSelect.Configuration
@@ -88,12 +88,12 @@
 
     protected override async Task OnInitializedAsync()
     {
-        await SheetMapperInterop.Initialize(CancellationToken).NoSync();
+        await SheetMapperInterop.Initialize(CancellationToken);
     }
 
     private async Task OnAddFile((FilePondError? error, FilePondFileItem fileItem) obj)
     {
-        Stream? stream = await FilePond!.GetStreamForFile().NoSync();
+        Stream? stream = await FilePond!.GetStreamForFile();
         SepReader sepReader = await Sep.Reader().FromAsync(stream);
 
         _headers = sepReader.Header.ColNames.ToList();
@@ -108,7 +108,7 @@
             StateHasChanged();
         }
 
-        await stream.DisposeAsync().NoSync();
+        await stream.DisposeAsync();
     }
 
     public void AutoMap()
