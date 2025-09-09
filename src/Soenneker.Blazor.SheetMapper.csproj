@@ -44,9 +44,9 @@
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="9.0.9" />
         <PackageReference Include="Sep" Version="0.11.1" />
-        <PackageReference Include="Soenneker.Blazor.FilePond" Version="3.0.3282" />
-        <PackageReference Include="Soenneker.Blazor.TomSelect" Version="3.0.3962" />
-        <PackageReference Include="Soenneker.Quark.Components.Cancellable" Version="3.0.9" />
+        <PackageReference Include="Soenneker.Blazor.FilePond" Version="3.0.3289" />
+        <PackageReference Include="Soenneker.Blazor.TomSelect" Version="3.0.3972" />
+        <PackageReference Include="Soenneker.Quark.Components.Cancellable" Version="3.0.10" />
         <PackageReference Include="Soenneker.Extensions.CancellationTokens" Version="3.0.3" />
     </ItemGroup>
 </Project>
