@@ -1,52 +1,53 @@
-﻿<?xml version="1.0" encoding="utf-8"?><Project Sdk="Microsoft.NET.Sdk.Razor">
+﻿<?xml version="1.0" encoding="utf-8"?>
 
-    <PropertyGroup>
-        <TargetFrameworks>net9.0</TargetFrameworks>
-        <Nullable>enable</Nullable>
-        <Platforms>AnyCPU</Platforms>
-        <NoWarn>$(NoWarn);1591</NoWarn>
-    </PropertyGroup>
+<Project Sdk="Microsoft.NET.Sdk.Razor">
 
-    <PropertyGroup>
-        <Description>A Blazor component and utility library for mapping uploaded CSV or tabular files to C# objects. Supports header extraction and user-defined property mapping.</Description>
-        <Version Condition="'$(BUILD_VERSION)' == ''">3.0.0</Version>
-        <Version Condition="'$(BUILD_VERSION)' != ''">$(BUILD_VERSION)</Version>
-        <AssemblyName>Soenneker.Blazor.SheetMapper</AssemblyName>
-        <PackageId>Soenneker.Blazor.SheetMapper</PackageId>
-        <PackageTags>blazor sheetmapper sheet mapper csv excel blazorsheetmapper blazorlibrary csharp dotnet c# .net</PackageTags>
-        <Copyright>Copyright © 2025 Jake Soenneker</Copyright>
-        <Authors>Jake Soenneker</Authors>
-        <Company>https://soenneker.com</Company>
-        <GenerateDocumentationFile>true</GenerateDocumentationFile>
-        <EmbedUntrackedSources>true</EmbedUntrackedSources>
-        <IncludeSymbols>true</IncludeSymbols>
-        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-        <IsPackable>true</IsPackable>
-        <PackageLicenseExpression>MIT</PackageLicenseExpression>
-        <PackageProjectUrl>https://github.com/soenneker/soenneker.blazor.sheetmapper</PackageProjectUrl>
-        <RepositoryUrl>https://github.com/soenneker/soenneker.blazor.sheetmapper</RepositoryUrl>
-        <RepositoryType>git</RepositoryType>
-        <RepositoryBranch>main</RepositoryBranch>
-        <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-        <PublishRepositoryUrl>true</PublishRepositoryUrl>
-        <LangVersion>latest</LangVersion>
-        <PackageReadmeFile>README.md</PackageReadmeFile>
-        <PackageIcon>icon.png</PackageIcon>
-    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild></PropertyGroup>
-    
-    <ItemGroup>
-        
-        <None Include="..\README.md" Pack="true" PackagePath="\" />
-        <None Include="..\LICENSE" Pack="true" PackagePath="\" />
-        <None Include="..\icon.png" Pack="true" PackagePath="\" />
-    </ItemGroup>
+	<PropertyGroup>
+		<TargetFrameworks>net9.0</TargetFrameworks>
+		<Nullable>enable</Nullable>
+		<Platforms>AnyCPU</Platforms>
+		<NoWarn>$(NoWarn);1591</NoWarn>
+	</PropertyGroup>
 
-    <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="9.0.9" />
-        <PackageReference Include="Sep" Version="0.11.1" />
-        <PackageReference Include="Soenneker.Blazor.FilePond" Version="3.0.3291" />
-        <PackageReference Include="Soenneker.Blazor.TomSelect" Version="3.0.3975" />
-        <PackageReference Include="Soenneker.Quark.Components.Cancellable" Version="3.0.10" />
-        <PackageReference Include="Soenneker.Extensions.CancellationTokens" Version="3.0.3" />
-    </ItemGroup>
+	<PropertyGroup>
+		<Description>A Blazor component and utility library for mapping uploaded CSV or tabular files to C# objects. Supports header extraction and user-defined property mapping.</Description>
+		<Version Condition="'$(BUILD_VERSION)' == ''">3.0.0</Version>
+		<Version Condition="'$(BUILD_VERSION)' != ''">$(BUILD_VERSION)</Version>
+		<AssemblyName>Soenneker.Blazor.SheetMapper</AssemblyName>
+		<PackageId>Soenneker.Blazor.SheetMapper</PackageId>
+		<PackageTags>blazor sheetmapper sheet mapper csv excel blazorsheetmapper blazorlibrary csharp dotnet c# .net</PackageTags>
+		<Copyright>Copyright © 2025 Jake Soenneker</Copyright>
+		<Authors>Jake Soenneker</Authors>
+		<Company>https://soenneker.com</Company>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<EmbedUntrackedSources>true</EmbedUntrackedSources>
+		<IncludeSymbols>true</IncludeSymbols>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+		<IsPackable>true</IsPackable>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageProjectUrl>https://github.com/soenneker/soenneker.blazor.sheetmapper</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/soenneker/soenneker.blazor.sheetmapper</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<RepositoryBranch>main</RepositoryBranch>
+		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+		<PublishRepositoryUrl>true</PublishRepositoryUrl>
+		<LangVersion>latest</LangVersion>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<PackageIcon>icon.png</PackageIcon>
+		<ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Include="..\README.md" Pack="true" PackagePath="\" />
+		<None Include="..\LICENSE" Pack="true" PackagePath="\" />
+		<None Include="..\icon.png" Pack="true" PackagePath="\" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="9.0.9" />
+		<PackageReference Include="Sep" Version="0.11.1" />
+		<PackageReference Include="Soenneker.Blazor.FilePond" Version="3.0.3291" />
+		<PackageReference Include="Soenneker.Blazor.TomSelect" Version="3.0.3975" />
+
+	</ItemGroup>
 </Project>
