@@ -6,14 +6,13 @@
 @using Soenneker.Blazor.FilePond.Dtos
 @using Soenneker.Blazor.FilePond.Options
 @using Soenneker.Blazor.SheetMapper.Abstract
-@using Soenneker.Quark.Components.Cancellable
 
 @inject ISheetMapperInterop SheetMapperInterop
 
-@inherits CancellableComponent
+@inherits Soenneker.Quark.CoreCancellableComponent
 @implements ISheetMapper
 
-<div id="@ElementId" >
+<div id="@Id" >
     <section class="mb-4" >
         <label class="form-label fw-semibold" >1. Upload your CSV file</label>
         <FilePond @ref="FilePond" Options="_options" OnAddFile="OnAddFile" />
@@ -55,7 +54,7 @@
 </div>
 
 @code {
-    public readonly string ElementId = $"sheetmapper-{Guid.NewGuid()}";
+    public override string? Id { get; set; } = $"sheetmapper-{Guid.NewGuid()}";
 
     private FilePond? FilePond { get; set; }
     private readonly FilePondOptions _options = new() {MaxFiles = 1, AllowMultiple = false};

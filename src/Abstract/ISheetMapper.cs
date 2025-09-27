@@ -1,14 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Soenneker.Quark.Components.Cancellable.Abstract;
+using Soenneker.Quark;
 
 namespace Soenneker.Blazor.SheetMapper.Abstract;
 
 /// <summary>
 /// Provides an interface for mapping CSV file headers to properties of a specified C# model type.
 /// </summary>
-public interface ISheetMapper : ICancellableComponent
+public interface ISheetMapper : ICoreCancellableComponent
 {
     /// <summary>
     /// Gets or sets the target type to map CSV columns to. Must be a class with public writable properties.
