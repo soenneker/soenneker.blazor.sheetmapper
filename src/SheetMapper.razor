@@ -81,12 +81,19 @@
     private List<string> _headers = [];
     private List<string> _targetProperties = [];
     private Dictionary<string, List<string>> _targetToHeaderMap = new();
+    private bool _interopInitialized;
 
     public ValueTask InitializeInterop() => SheetMapperInterop.Initialize(CancellationToken);
 
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
+        await base.OnAfterRenderAsync(firstRender);
+
+        if (!firstRender && _interopInitialized)
+            return;
+
         await SheetMapperInterop.Initialize(CancellationToken);
+        _interopInitialized = true;
     }
 
     private async Task OnAddFile((FilePondError? error, FilePondFileItem fileItem) obj)
