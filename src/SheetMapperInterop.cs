@@ -11,12 +11,17 @@ public sealed class SheetMapperInterop : ISheetMapperInterop
 {
     private readonly AsyncInitializer _scriptInitializer;
 
+    private readonly IResourceLoader _resourceLoader;
+
     public SheetMapperInterop(IResourceLoader resourceLoader)
     {
-        _scriptInitializer = new AsyncInitializer(async token =>
-        {
-            await resourceLoader.LoadStyle("_content/Soenneker.Blazor.SheetMapper/css/sheetmapper.css", cancellationToken: token);
-        });
+        _resourceLoader = resourceLoader;
+        _scriptInitializer = new AsyncInitializer(InitializeScript);
+    }
+
+    private async ValueTask InitializeScript(CancellationToken token)
+    {
+        await _resourceLoader.LoadStyle("_content/Soenneker.Blazor.SheetMapper/css/sheetmapper.css", cancellationToken: token);
     }
 
     public ValueTask Initialize(CancellationToken cancellationToken = default)
