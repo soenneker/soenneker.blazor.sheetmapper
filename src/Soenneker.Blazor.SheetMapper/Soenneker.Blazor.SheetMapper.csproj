@@ -52,3 +52,4 @@
 		<PackageReference Include="Soenneker.Blazor.TomSelect" Version="4.0.4346" />
 	</ItemGroup>
 </Project>
+
