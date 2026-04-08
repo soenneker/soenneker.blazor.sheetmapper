@@ -21,7 +21,7 @@ public sealed class SheetMapperInterop : ISheetMapperInterop
 
     private ValueTask InitializeScript(CancellationToken token)
     {
-        return _resourceLoader.LoadStyle("/_content/Soenneker.Blazor.SheetMapper/css/sheetmapper.css", cancellationToken: token);
+        return _resourceLoader.LoadStyle("_content/Soenneker.Blazor.SheetMapper/css/sheetmapper.css", cancellationToken: token);
     }
 
     public ValueTask Initialize(CancellationToken cancellationToken = default)
