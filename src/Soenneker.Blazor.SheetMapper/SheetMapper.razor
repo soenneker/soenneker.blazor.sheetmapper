@@ -6,6 +6,7 @@
 @using Soenneker.Blazor.FilePond.Dtos
 @using Soenneker.Blazor.FilePond.Options
 @using Soenneker.Blazor.SheetMapper.Abstract
+@using Soenneker.Blazor.Utils.Ids
 
 @inject ISheetMapperInterop SheetMapperInterop
 
@@ -54,7 +55,7 @@
 </div>
 
 @code {
-    public override string? Id { get; set; } = $"sheetmapper-{Guid.NewGuid()}";
+    public override string? Id { get; set; } = BlazorIdGenerator.New("sheetmapper");
 
     private FilePond? FilePond { get; set; }
     private readonly FilePondOptions _options = new() {MaxFiles = 1, AllowMultiple = false};
