@@ -1,18 +1,17 @@
-using Soenneker.Tests.FixturedUnit;
-using Xunit;
+using Soenneker.Tests.HostedUnit;
 
 namespace Soenneker.Blazor.SheetMapper.Tests;
 
-[Collection("Collection")]
-public sealed class BlazorSheetMapperTests : FixturedUnitTest
+[ClassDataSource<Host>(Shared = SharedType.PerTestSession)]
+public sealed class BlazorSheetMapperTests : HostedUnitTest
 {
 
-    public BlazorSheetMapperTests(Fixture fixture, ITestOutputHelper output) : base(fixture, output)
+    public BlazorSheetMapperTests(Host host) : base(host)
     {
 
     }
 
-    [Fact]
+    [Test]
     public void Default()
     {
 
