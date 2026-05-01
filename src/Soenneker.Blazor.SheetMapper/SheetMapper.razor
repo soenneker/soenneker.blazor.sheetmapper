@@ -10,7 +10,7 @@
 
 @inject ISheetMapperInterop SheetMapperInterop
 
-@inherits Soenneker.Quark.CoreCancellableComponent
+@inherits Soenneker.Lepton.Suite.LeptonCancellableIdentifiableContentElement
 @implements ISheetMapper
 
 <div id="@Id" >
@@ -55,7 +55,10 @@
 </div>
 
 @code {
-    public override string? Id { get; set; } = BlazorIdGenerator.New("sheetmapper");
+    public SheetMapper()
+    {
+        Id = BlazorIdGenerator.New("sheetmapper");
+    }
 
     private FilePond? FilePond { get; set; }
     private readonly FilePondOptions _options = new() {MaxFiles = 1, AllowMultiple = false};
