@@ -46,7 +46,7 @@
     <ItemGroup>
         <PackageReference Include="Sep" Version="0.15.1" />
         <PackageReference Include="Soenneker.Blazor.FilePond" Version="4.0.3781" />
-        <PackageReference Include="Soenneker.Blazor.TomSelect" Version="4.0.4558" />
+        <PackageReference Include="Soenneker.Blazor.TomSelect" Version="4.0.4560" />
         <PackageReference Include="Soenneker.Blazor.Utils.Ids" Version="4.0.18" />
     </ItemGroup>
 </Project>
