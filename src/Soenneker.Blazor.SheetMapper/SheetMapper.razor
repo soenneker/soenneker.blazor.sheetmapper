@@ -102,11 +102,26 @@
 
     private async Task OnAddFile((FilePondError? error, FilePondFileItem fileItem) obj)
     {
-        Stream? stream = await FilePond!.GetStreamForFile();
-        SepReader sepReader = await Sep.Reader().FromAsync(stream);
+        if (obj.error is not null)
+        {
+            ClearMapping();
+            return;
+        }
 
-        _headers = sepReader.Header.ColNames.ToList();
-        _targetProperties = TargetType!.GetProperties(BindingFlags.Public | BindingFlags.Instance).Where(p => p.CanWrite).Select(p => p.Name).ToList();
+        Type targetType = TargetType ?? throw new InvalidOperationException($"{nameof(TargetType)} must be provided before a file is added.");
+        Stream stream = await FilePond!.GetStreamForFile(obj.fileItem.Id, cancellationToken: CancellationToken) ??
+                        throw new InvalidOperationException("The uploaded file is no longer available.");
+
+        await using (stream)
+        using (SepReader sepReader = await Sep.Reader().FromAsync(stream, CancellationToken))
+        {
+            _headers = sepReader.Header.ColNames.ToList();
+        }
+
+        _targetProperties = targetType.GetProperties(BindingFlags.Public | BindingFlags.Instance)
+                                      .Where(p => p.CanWrite && p.GetIndexParameters().Length == 0)
+                                      .Select(p => p.Name)
+                                      .ToList();
 
         // init empty selection for each property
         _targetToHeaderMap = _targetProperties.ToDictionary(p => p, _ => new List<string>());
@@ -117,7 +132,14 @@
             StateHasChanged();
         }
 
-        await stream.DisposeAsync();
+    }
+
+    private void ClearMapping()
+    {
+        _headers = [];
+        _targetProperties = [];
+        _targetToHeaderMap = new Dictionary<string, List<string>>();
+        StateHasChanged();
     }
 
     public void AutoMap()

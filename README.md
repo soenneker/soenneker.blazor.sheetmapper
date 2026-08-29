@@ -5,24 +5,13 @@
 
 # Soenneker.Blazor.SheetMapper
 
-A Blazor component and utility library for mapping CSV or tabular files to C# objects.
+A Blazor upload-and-selection component for matching CSV or tab-delimited column headers to writable properties on a C# type.
 
-![image](https://github.com/user-attachments/assets/7aa39358-be2d-47af-8f04-68ac37281112)
+![SheetMapper example](https://github.com/user-attachments/assets/7aa39358-be2d-47af-8f04-68ac37281112)
 
-Leverage [FilePond](https://github.com/soenneker/soenneker.blazor.filepond) for uploads and [TomSelect](https://github.com/soenneker/soenneker.blazor.tomselect) for interactive dropdowns. Automatically extract headers, map columns to your model, and retrieve a clean `{ property ? column }` map.
+[Live demo](https://soenneker.github.io/soenneker.blazor.sheetmapper)
 
-[Demo](https://soenneker.github.io/soenneker.blazor.sheetmapper)
-
-## Features
-
-* **Header extraction** from CSV or tab-delimited files
-* **Interactive mapping** of columns to model properties
-* **Automatic heuristic mapping** (case- and whitespace-insensitive)
-* **Status icons** for *unmapped*, *duplicate*, and *mapped* states
-* **Show/hide** the status-icon column on demand
-* **API** to fetch the final mapping as `Dictionary<string, string>`
-
----
+SheetMapper produces a property-to-header dictionary. It does not parse data rows, convert cell values, validate a complete mapping, or create model instances.
 
 ## Installation
 
@@ -30,110 +19,75 @@ Leverage [FilePond](https://github.com/soenneker/soenneker.blazor.filepond) for 
 dotnet add package Soenneker.Blazor.SheetMapper
 ```
 
----
+Register SheetMapper and its FilePond and Tom Select dependencies in `Program.cs`:
 
-## Setup
+```csharp
+using Soenneker.Blazor.SheetMapper.Registrars;
 
-1. **Register interop** in your DI container (e.g., `Program.cs`):
+builder.Services.AddSheetMapperAsScoped();
+```
 
-   ```csharp
-   builder.Services.AddSheetMapperAsScoped();
-   ```
-
-2. **Import namespace** in your `_Imports.razor` or component:
-
-   ```razor
-   @using Soenneker.Blazor.SheetMapper
-   ```
-
----
-
-## Basic Usage
+Add the component namespace to `_Imports.razor`:
 
 ```razor
-@page "/import"
-@inject ISheetMapperInterop SheetMapperInterop
+@using Soenneker.Blazor.SheetMapper
+```
 
-<SheetMapper
-    @ref="sheetMapper"
-    TargetType="typeof(Employee)"
-    AutomaticallyMap="true"
-    ShowStatusIcons="true" />
+## Usage
 
-<button class="btn btn-primary mt-3" @onclick="ShowMap">
-    Get Mapping
-</button>
+```razor
+@page "/employees/import"
+
+<SheetMapper @ref="_mapper"
+             TargetType="typeof(Employee)"
+             AutomaticallyMap="true" />
+
+<button type="button" @onclick="UseMapping">Continue</button>
 
 @code {
-    private SheetMapper? sheetMapper;
+    private SheetMapper? _mapper;
 
-    private void ShowMap()
+    private void UseMapping()
     {
-        if (sheetMapper is not null)
-        {
-            var map = sheetMapper.GetCurrentMap();
-            // map: property ? CSV column
-        }
+        Dictionary<string, string> mapping = _mapper!.GetCurrentMap();
+
+        // Example:
+        // mapping["FirstName"] == "First Name"
+        // mapping["Department"] == "" when no column was selected
     }
 }
 ```
 
----
+`TargetType` is required. The component creates one selector for each public, writable, non-indexer property. Uploading a new file replaces the current headers and mapping.
 
-## Component Parameters
+## Mapping behavior
 
-| Parameter          | Type             | Default | Description                                                    |
-| ------------------ | ---------------- | ------- | -------------------------------------------------------------- |
-| `TargetType`       | `Type`           | �       | **Required.** Model type whose writable properties are mapped. |
-| `AutomaticallyMap` | `bool`           | `false` | Run auto-mapping heuristic on file load.                       |
-| `ShowStatusIcons`  | `bool`           | `true`  | Toggle visibility of the status-icon column.                   |
-| `NotMappedIcon`    | `RenderFragment` | ??      | Icon/markup for unmapped state.                                |
-| `DuplicatedIcon`   | `RenderFragment` | ??      | Icon/markup for duplicate-mapping state.                       |
-| `MappedIcon`       | `RenderFragment` | ?       | Icon/markup for successful mapping.                            |
+When `AutomaticallyMap` is enabled—or when `AutoMap()` is called—the mapper compares each property name with the uploaded headers:
 
----
+- comparison is case-insensitive;
+- spaces are removed from headers before the second comparison;
+- punctuation, underscores, aliases, and data annotations are not normalized;
+- multiple properties may select the same header.
 
-## Public API
+Duplicate selections are marked in the UI but are not rejected. Validate the dictionary before using it if every property must map to a unique column.
 
-* `void AutoMap()`
-  Re-run the auto-mapping logic at any time.
+`GetCurrentMap()` returns property names as keys and selected source headers as values. Unmapped properties have an empty-string value.
 
-* `Dictionary<string, string> GetCurrentMap()`
-  Returns `{ property ? selected column }`. Unmapped properties return `""`.
+## Parameters
 
----
+| Parameter | Default | Purpose |
+| --- | --- | --- |
+| `TargetType` | — | Type whose public writable properties are displayed. |
+| `AutomaticallyMap` | `false` | Runs the built-in name-matching heuristic after an upload. |
+| `ShowStatusIcons` | `true` | Shows mapped, unmapped, and duplicate indicators. |
+| `NotMappedIcon` | `⚠️` | Markup used for an unmapped property. |
+| `DuplicatedIcon` | `🔁` | Markup used when a header is selected more than once. |
+| `MappedIcon` | `✅` | Markup used for a unique selection. |
 
-## Customization
+The rendered markup uses Bootstrap-style classes such as `input-group`, `input-group-text`, and `form-control`. Include compatible host styles or override those classes in your application. Package CSS is loaded automatically when the component becomes interactive.
 
-### Status Icons
+## Upload considerations
 
-Override the built-in emojis with your own markup (SVG, `<i>`, etc.):
-
-```razor
-<SheetMapper
-    TargetType="typeof(Employee)"
-    NotMappedIcon="@<i class='fas fa-exclamation-triangle'></i>"
-    DuplicatedIcon="@<i class='fas fa-sync-alt'></i>"
-    MappedIcon="@<i class='fas fa-check-circle'></i>"
-/>
-```
-
-### Show/Hide Icon Column
-
-Use the `ShowStatusIcons` parameter to toggle the entire status-icon column:
-
-```razor
-<!-- hides the icons -->
-<SheetMapper TargetType="typeof(Employee)" ShowStatusIcons="false" />
-```
-
----
-
-## Styling
-
-* **CSS classes** for fine-tuning:
-
-  * `.map-row` � wrapper for each mapping row
-  * `.status-icon` � container for the icon
-
-Override or extend them to match your design system.
+- The upload is read in the browser interop path and is limited by FilePond's configured maximum stream size; the default configuration used here limits the stream to 2 MB.
+- File content is used only to discover headers. Your application remains responsible for validating the file, parsing rows, converting values, and enforcing import limits before persistence.
+- Spreadsheet formats such as `.xlsx` are not supported. Export them as CSV or tab-delimited text first.
