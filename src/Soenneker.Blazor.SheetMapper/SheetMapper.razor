@@ -144,11 +144,23 @@
 
     public void AutoMap()
     {
+        if (_targetProperties.Count == 0)
+            return;
+
+        var headersByName = new Dictionary<string, string>(_headers.Count, StringComparer.OrdinalIgnoreCase);
+
+        foreach (string header in _headers)
+        {
+            headersByName.TryAdd(header, header);
+
+            string compactHeader = header.Replace(" ", "");
+            if (!ReferenceEquals(compactHeader, header))
+                headersByName.TryAdd(compactHeader, header);
+        }
+
         foreach (string prop in _targetProperties)
         {
-            string? match = _headers.FirstOrDefault(h => string.Equals(h, prop, StringComparison.OrdinalIgnoreCase) || string.Equals(h.Replace(" ", ""), prop, StringComparison.OrdinalIgnoreCase));
-
-            _targetToHeaderMap[prop] = match is null ? [] : [match];
+            _targetToHeaderMap[prop] = headersByName.TryGetValue(prop, out string? match) ? [match] : [];
         }
     }
 
