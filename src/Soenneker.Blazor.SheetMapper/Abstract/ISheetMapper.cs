@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -13,6 +14,7 @@ public interface ISheetMapper : ILeptonCancellableIdentifiableContentElement
     /// <summary>
     /// Gets or sets the target type to map CSV columns to. Must be a class with public writable properties.
     /// </summary>
+    [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties)]
     Type? TargetType { get; set; }
 
     /// <summary>
